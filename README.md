@@ -2,7 +2,10 @@
 
 MCP-Server, der ElevenLabs Sprachagent:innen die letzten Wiesen-Messwerte aus Airtable serviert; deployt auf Fly.io.
 
-Der Server stellt genau ein Tool bereit: `letzteWiesenMesswerte(anzahl?)`. Es liest die neuesten Einträge der Tabelle `tblkW2wLpNV8o3lU9` aus der Base `app7UYhpyvrvITemh` und liefert einen sprechbaren deutschen Satz plus strukturierte Rohwerte.
+Der Server stellt zwei Tools bereit:
+
+- `letzteWiesenMesswerte(anzahl?)`: liest die neuesten Einträge der Tabelle `tblkW2wLpNV8o3lU9` aus der Base `app7UYhpyvrvITemh` und liefert einen sprechbaren deutschen Satz plus strukturierte Rohwerte.
+- `wiesenWissen(suchbegriff)`: durchsucht die Tabelle `Wiesenwissen` (kuratierte Fragen und Antworten in Sprechsprache) per Stichwort in Frage und Antwort; liefert bis zu drei Treffer als sprechbare Sätze. Unbeantwortete Fragen werden ehrlich als offen gemeldet.
 
 ## Aufbau
 
@@ -66,6 +69,7 @@ Danach läuft der Server unter `https://<app-name>.fly.dev`; der MCP-Endpunkt is
 | `MCP_SECRET` | dringend empfohlen | Authorization-Header, den ElevenLabs mitschickt |
 | `AIRTABLE_BASE_ID` | nein | Standard: app7UYhpyvrvITemh |
 | `AIRTABLE_TABLE` | nein | Standard: tblkW2wLpNV8o3lU9 |
+| `AIRTABLE_TABLE_WISSEN` | nein | Standard: Wiesenwissen |
 | `LETZTE_N` | nein | Standardanzahl Messungen; Vorgabe 3 |
 | `MOCK_WIESEN` | nein | `true` liefert Beispieldaten ohne Airtable |
 | `PORT` | nein | Standard 8080 |

@@ -2,7 +2,7 @@ import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
-import { holeLetzteWiesenMesswerte, alsSprechbarenText } from "./wiesen.js";
+import { holeLetzteWiesenMesswerte, alsSprechbarenText, sucheWiesenWissen, wissenAlsSprechbarenText } from "./wiesen.js";
 import { KONFIG } from "./wiesen-konfig.js";
 
 const PORT = Number(process.env.PORT || 8080);
@@ -44,6 +44,29 @@ function baueServer() {
     }
   );
 
+  server.registerTool(
+    "wiesenWissen",
+    {
+      title: "Wiesen-Wissenssuche",
+      description:
+        "Durchsucht die Wissensbasis der Wiese (kuratierte Fragen und Antworten in Sprechsprache) nach einem Stichwort. Nutze dieses Tool bei Sachfragen über Wiesen, Pflanzen, Tiere, Boden, Pflege oder das Projekt; nicht für aktuelle Messwerte, dafür gibt es letzteWiesenMesswerte.",
+      inputSchema: {
+        suchbegriff: z
+          .string()
+          .min(2)
+          .describe("Stichwort, nach dem in den Fragen und Antworten gesucht wird, zum Beispiel mähen, Bienen oder Dünger."),
+      },
+    },
+    async ({ suchbegriff }) => {
+      const treffer = await sucheWiesenWissen(suchbegriff);
+      const text = wissenAlsSprechbarenText(treffer);
+      return {
+        content: [{ type: "text", text }],
+        structuredContent: { treffer, zusammenfassung: text },
+      };
+    }
+  );
+
   return server;
 }
 
@@ -66,7 +89,7 @@ app.get("/", (_req, res) => {
     name: "wiesen-mcp",
     status: "ok",
     endpoint: "/mcp",
-    tools: ["letzteWiesenMesswerte"],
+    tools: ["letzteWiesenMesswerte", "wiesenWissen"],
   });
 });
 
