@@ -1,0 +1,19 @@
+{
+  "name": "wiesen-mcp",
+  "version": "1.0.0",
+  "description": "MCP-Server fuer Wiesen-Messwerte aus Airtable; gebaut fuer ElevenLabs Sprachagent:innen auf Fly.io",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "MOCK_WIESEN=true node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "express": "^4.21.2",
+    "zod": "^3.24.1"
+  }
+}
